@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-// import * as actions from "../store/actions";
 import * as actions from '../../store/actions';
 import './Login.scss';
 import { FormattedMessage } from 'react-intl';
-
+import { handleLoginAPI } from '../../services/userService';
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'abc',
-      password: '123',
+      username: '',
+      password: '',
+      errMessage: '',
       isShowed: false,
     };
   }
@@ -22,9 +22,27 @@ class Login extends Component {
   handleOnChangePassword = (event) => {
     this.setState({ password: event.target.value });
   };
-  handleLogin = () => {
-    console.log(this.state.username);
-    console.log(this.state.password);
+  handleLogin = async () => {
+    this.setState({ errMessage: '' });
+    try {
+      const data = await handleLoginAPI(this.state.username, this.state.password);
+      console.log(data);
+      if(data && data.errCode){
+        this.setState({
+          errMessage:data.message,
+        });
+      }
+      if(data && data.errCode === 0){
+        this.props.userLoginSuccess(data.user)
+        console.log('login successfully !');
+      }
+    } catch (error) {
+      if(error.response){
+        if(error.response.data){
+          this.setState({ errMessage: error.response.data.message });
+        }
+      }
+    }
   };
   handleHideShowPassword = () => {
     this.setState({ isShowed: !this.state.isShowed });
@@ -73,6 +91,7 @@ class Login extends Component {
                 Login
               </button>
             </div>
+            <div className='col-12 text-danger'>{this.state.errMessage}</div>
             <div className='col-12'>
               <span className='forgot-passsword'>Forgot your password?</span>
             </div>
@@ -99,9 +118,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
-    adminLoginSuccess: (adminInfo) =>
-      dispatch(actions.adminLoginSuccess(adminInfo)),
-    adminLoginFail: () => dispatch(actions.adminLoginFail()),
+    //  userLoginFail: () => dispatch(actions.adminLoginFail()),
+    userLoginSuccess:(userInfo)=> dispatch(actions.userLoginSuccess(userInfo))
   };
 };
 
