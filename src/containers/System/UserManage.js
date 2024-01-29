@@ -2,41 +2,62 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import './UserManage.scss';
-import { getAllUsers } from '../../services/userService';
+import { getAllUsers, createNewUserService } from '../../services/userService';
 import ModalUser from './ModalUser';
 class UserManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       arrUsers: [],
-      isModalOpen:false
+      isModalOpen: false,
     };
   }
 
   async componentDidMount() {
+    await this.getAllUsersFromReact();
+  }
+  getAllUsersFromReact = async () => {
     const response = await getAllUsers('ALL');
     if (response && response.errCode === 0) {
       this.setState({
         arrUsers: response.users,
       });
     }
-  }
+  };
   handleAddNewUser = () => {
     this.setState({
-      isModalOpen:true
-    })
+      isModalOpen: true,
+    });
   };
-  toggleUserModal = ()=>{
+  toggleUserModal = () => {
     this.setState({
-      isModalOpen:!this.state.isModalOpen
-    })
-  }
+      isModalOpen: !this.state.isModalOpen,
+    });
+  };
+  createNewUser = async (data) => {
+    try {
+      let response = await createNewUserService(data);
+      if (response && response.errCode !== 0) {
+        alert(response.errMessage);
+      } else {
+        await this.getAllUsersFromReact();
+        this.toggleUserModal();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    console.log('check data ', data);
+  };
   render() {
     console.log('check render:', this.state);
     const allUsers = this.state.arrUsers;
     return (
       <div className='users-container'>
-      <ModalUser open = {this.state.isModalOpen} onHandleToggle = {this.toggleUserModal}/>
+        <ModalUser
+          open={this.state.isModalOpen}
+          onHandleToggle={this.toggleUserModal}
+          createNewUser={this.createNewUser}
+        />
         <div className='title'>Manage users with React</div>
         <div className='mx-1'>
           <button
@@ -56,26 +77,27 @@ class UserManage extends Component {
               <th>Address</th>
               <th>Actions</th>
             </tr>
-
-            {allUsers &&
-              allUsers.map((user, index) => {
-                return (
-                  <tr>
-                    <td>{user.email}</td>
-                    <td>{user.firstName}</td>
-                    <td>{user.lastName}</td>
-                    <td>{user.address}</td>
-                    <td className='d-flex'>
-                      <button className='btn-edit'>
-                        <i className='fas fa-pencil-alt'></i>
-                      </button>
-                      <button className='btn-delete'>
-                        <i className='fas fa-trash'></i>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+            <tbody>
+              {allUsers &&
+                allUsers.map((user, index) => {
+                  return (
+                    <tr>
+                      <td>{user.email}</td>
+                      <td>{user.firstName}</td>
+                      <td>{user.lastName}</td>
+                      <td>{user.address}</td>
+                      <td className='d-flex'>
+                        <button className='btn-edit'>
+                          <i className='fas fa-pencil-alt'></i>
+                        </button>
+                        <button className='btn-delete'>
+                          <i className='fas fa-trash'></i>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
           </table>
         </div>
       </div>
