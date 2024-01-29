@@ -6,15 +6,19 @@ import {
   getAllUsers,
   createNewUserService,
   deleteUserService,
+  editUserService,
 } from '../../services/userService';
 import { emitter } from '../../utils/emitter';
 import ModalUser from './ModalUser';
+import ModalEditUser from './ModalEditUser';
 class UserManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       arrUsers: [],
       isModalOpen: false,
+      isEditModalOpen: false,
+      userEdit: {},
     };
   }
 
@@ -37,6 +41,11 @@ class UserManage extends Component {
   toggleUserModal = () => {
     this.setState({
       isModalOpen: !this.state.isModalOpen,
+    });
+  };
+  toggleUserEditModal = () => {
+    this.setState({
+      isEditModalOpen: !this.state.isEditModalOpen,
     });
   };
   createNewUser = async (data) => {
@@ -66,6 +75,27 @@ class UserManage extends Component {
       console.log(error);
     }
   };
+  handleEditUser = (user) => {
+    console.log('check edit user ', user);
+    this.setState({
+      isEditModalOpen: true,
+      userEdit: user,
+    });
+  };
+  doEditUser = async (user) => {
+    const res = await editUserService(user);
+    try {
+      if (res && res.errCode === 0) {
+        this.toggleUserEditModal();
+        await this.getAllUsersFromReact();
+      } else {
+        alert(res.errCode);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    console.log('handle edit user ', res);
+  };
   render() {
     console.log('check render:', this.state);
     const allUsers = this.state.arrUsers;
@@ -76,6 +106,16 @@ class UserManage extends Component {
           onHandleToggle={this.toggleUserModal}
           createNewUser={this.createNewUser}
         />
+        {this.state.isEditModalOpen && (
+          <ModalEditUser
+            open={this.state.isEditModalOpen}
+            onHandleToggle={this.toggleUserEditModal}
+            currentUser={this.state.userEdit}
+            editUser={this.doEditUser}
+            // createNewUser={this.createNewUser}
+          />
+        )}
+
         <div className='title'>Manage users with React</div>
         <div className='mx-1'>
           <button
@@ -105,7 +145,10 @@ class UserManage extends Component {
                       <td>{user.lastName}</td>
                       <td>{user.address}</td>
                       <td className='d-flex'>
-                        <button className='btn-edit'>
+                        <button
+                          className='btn-edit'
+                          onClick={() => this.handleEditUser(user)}
+                        >
                           <i className='fas fa-pencil-alt'></i>
                         </button>
                         <button
