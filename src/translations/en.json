@@ -1,4 +1,26 @@
 {
+    "homeheader":{
+        "specialty":"Specialty",
+        "searchdoctor":"Find doctor by specialty",
+        "health-facility":"Health facilities",
+        "select-room":"Choose hospital clinic",
+        "doctor":"Doctor",
+        "select-doctor":"Choose doctor",
+        "fee":"Health-check package",
+        "check-health":"Overall health check",
+        "support":"Hỗ trợ"
+
+    },
+    "banner":{
+        "title1":"MEDICAL BASE",
+        "title2":"COMPREHENSIVE HEALTH CARE",
+        "child1":"Specialized health-check",
+        "child2":"Remote health-check",
+        "child3":"Overall health-check",
+        "child4":"Medical test",
+        "child5":"Mental health",
+        "child6":"Dental health-check"
+    },
     "common": {
         "add": "Add",
         "edit": "Edit",
