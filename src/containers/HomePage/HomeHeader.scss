@@ -59,10 +59,14 @@
                 .lang-vi{
                     &.active{
                         color: #49bce2;
+                        font-weight: 700;
                     }
                 }
                 .lang-en{
-
+                    &.active{
+                        color: #49bce2;
+                        font-weight: 700;
+                    }
                 }
             }
         }
