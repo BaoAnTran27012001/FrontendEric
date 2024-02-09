@@ -17,7 +17,10 @@ const deleteUserService = (userId) => {
   });
 };
 const editUserService = (inputData) => {
-  return axios.put('/api/edit-user',inputData);
+  return axios.put('/api/edit-user', inputData);
+};
+const getAllcodesService = (inputType) => {
+  return axios.get(`/api/allcode?type=${inputType}`);
 };
 export {
   handleLoginAPI,
@@ -25,4 +28,5 @@ export {
   createNewUserService,
   deleteUserService,
   editUserService,
+  getAllcodesService,
 };

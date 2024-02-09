@@ -22,7 +22,6 @@
         "child5":"Sức khoẻ tinh thần",
         "child6":"Khám nha khoa"
     },
-   
     "menu": {
         "admin":{
             "manage-user":"Người dùng",
@@ -37,6 +36,19 @@
             "handbook":"Cẩm nang",
             "manage-handbook":"Quản lý cẩm nang"
         }
+    },
+    "manage-user":{
+        "add":"Thêm mới người dùng",
+        "email":"Email",
+        "password":"Mật khẩu",
+        "first-name":"Tên",
+        "last-name":"Họ",
+        "phone-number":"Số điện thoại",
+        "address":"Địa chỉ",
+        "gender":"Giới tính",
+        "position":"Chức danh",
+        "role":"Vai trò",
+        "save":"Lưu người dùng",
+        "image":"Ảnh đại diện"
     }
-    
 }
