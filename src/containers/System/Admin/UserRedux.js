@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { getAllcodesService } from '../../../services/userService';
 import { LANGUAGES } from '../../../utils';
+import * as actions from '../../../store/actions';
 class UserRedux extends Component {
   constructor(props) {
     super(props);
@@ -12,20 +13,28 @@ class UserRedux extends Component {
     };
   }
   async componentDidMount() {
-    try {
-      const res = await getAllcodesService('gender');
-      if (res && res.errCode === 0) {
-        this.setState({
-          genderArr: res.data,
-        });
-      }
-      console.log('check all code response: ', res);
-    } catch (error) {}
+    this.props.getGenderStart();
+    // try {
+    //   const res = await getAllcodesService('gender');
+    //   if (res && res.errCode === 0) {
+    //     this.setState({
+    //       genderArr: res.data,
+    //     });
+    //   }
+    //   console.log('check all code response: ', res);
+    // } catch (error) {}
   }
-
+  componentDidUpdate(prevProps, prevState, snapShot) {
+    if (prevProps.genderRedux !== this.props.genderRedux) {
+      this.setState({
+        genderArr: this.props.genderRedux,
+      });
+    }
+  }
   render() {
     const genders = this.state.genderArr;
     const language = this.props.language;
+    console.log('baoan check props from redux: ', this.props.genderRedux);
     return (
       <div className='user-redux-container'>
         <div className='title'>Learn User Redux An Bao</div>
@@ -131,11 +140,18 @@ class UserRedux extends Component {
 const mapStateToProps = (state) => {
   return {
     language: state.app.language,
+    genderRedux: state.admin.genders,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    getGenderStart: () => dispatch(actions.fetchGenderStart()),
+    // processLogout: () => dispatch(actions.processLogout()),
+    // changeLanguageAppRedux: (language) => {
+    //   dispatch(actions.changeLanguageApp(language));
+    // },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRedux);
