@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { connect } from 'react-redux';
-import { LANGUAGES, CRUDActions } from '../../../utils';
+import { LANGUAGES, CRUDActions, CommonUtils } from '../../../utils';
 import * as actions from '../../../store/actions';
 import './UserRedux.scss';
 import Lightbox from 'react-image-lightbox';
@@ -89,17 +89,19 @@ class UserRedux extends Component {
         role: arrRoles && arrRoles.length > 0 ? arrRoles[0].key : '',
         avatar: '',
         action: CRUDActions.CREATE,
+        previewImgURL: '',
       });
     }
   }
-  handleOnChangeImage = (event) => {
+  handleOnChangeImage = async (event) => {
     let data = event.target.files;
     let file = data[0];
     if (file) {
+      let base64 = await CommonUtils.getBase64(file);
       let objURL = URL.createObjectURL(file);
       this.setState({
         previewImgURL: objURL,
-        avatar: file,
+        avatar: base64,
       });
     }
   };
@@ -124,6 +126,7 @@ class UserRedux extends Component {
         roleId: this.state.role,
         phonenumber: this.state.phoneNumber,
         positionId: this.state.position,
+        avatar: this.state.avatar,
       });
     }
     if (action === CRUDActions.EDIT) {
@@ -138,7 +141,7 @@ class UserRedux extends Component {
         roleId: this.state.role,
         phonenumber: this.state.phoneNumber,
         positionId: this.state.position,
-        // avatar: this.state.avatar,
+        avatar: this.state.avatar,
       });
     }
   };
@@ -183,6 +186,12 @@ class UserRedux extends Component {
   };
   handleEditUserFromParent = (user) => {
     console.log('baoan check edit user from parent: ', user);
+    let imageBase64 = '';
+    if (user.image) {
+      // const imageBuffer = Buffer.from(JSON.stringify(user.image));
+      imageBase64 = new Buffer(user.image, 'base64').toString('binary');
+    }
+
     this.setState({
       email: user.email,
       password: 'HARDCODE',
@@ -194,6 +203,7 @@ class UserRedux extends Component {
       gender: user.gender,
       role: user.roleId,
       avatar: '',
+      previewImgURL: imageBase64,
       action: CRUDActions.EDIT,
       userEditId: user.id,
     });
