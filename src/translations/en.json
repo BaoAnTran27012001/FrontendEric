@@ -13,7 +13,7 @@
 
     },
     "banner":{
-        "title1":"MEDICAL BASE",
+        "title1":"MEDICAL PLATFORM",
         "title2":"COMPREHENSIVE HEALTH CARE",
         "child1":"Specialized health-check",
         "child2":"Remote health-check",
@@ -51,5 +51,9 @@
         "save":"Save User",
         "image":"Avatar",
         "edit":"Save changes"
+    },
+    "homepage":{
+        "outstanding-doctor":"Outstanding Doctors Last Week",
+        "more-info":"More Information"
     }
 }

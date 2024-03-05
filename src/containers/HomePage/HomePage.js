@@ -15,8 +15,8 @@ import OutStandingDoctor from './Section/OutStandingDoctor';
 class HomePage extends Component {
   render() {
     let settings = {
-      dots: true,
-      infinite: true,
+      dots: false,
+      infinite: false,
       speed: 500,
       slidesToShow: 4,
       slidesToScroll: 1,
@@ -31,7 +31,7 @@ class HomePage extends Component {
         <OutStandingDoctor settings={settings} />
         <HandBook settings={settings} />
         <About />
-        <HomeFooter/>
+        <HomeFooter />
       </div>
     );
   }
