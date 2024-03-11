@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import * as actions from '../../../store/actions';
 import { LANGUAGES } from '../../../utils';
 import { FormattedMessage } from 'react-intl';
+import { withRouter } from 'react-router-dom';
 class OutStandingDoctor extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,10 @@ class OutStandingDoctor extends Component {
   }
   componentDidMount() {
     this.props.loadTopDoctors();
+  }
+  handleViewDetailDoctor(doctor) {
+    console.log('check view detail DOCtor: ', doctor);
+    this.props.history.push(`/detail-doctor/${doctor.id}`);
   }
   render() {
     let allTopDoctors = this.state.arrDoctors;
@@ -50,7 +55,10 @@ class OutStandingDoctor extends Component {
                   let nameVi = `${item.positionData.valueVi}, ${item.lastName} ${item.firstName}`;
                   let nameEn = `${item.positionData.valueEn}, ${item.firstName} ${item.lastName}`;
                   return (
-                    <div className='img-custom img-outstanding'>
+                    <div
+                      className='img-custom img-outstanding'
+                      onClick={() => this.handleViewDetailDoctor(item)}
+                    >
                       <img src={imageBase64} alt='section' />
                       <div className='position text-center'>
                         <div>{language === LANGUAGES.VI ? nameVi : nameEn}</div>
@@ -116,4 +124,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OutStandingDoctor);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(OutStandingDoctor)
+);
