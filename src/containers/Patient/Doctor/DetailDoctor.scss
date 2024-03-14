@@ -1,6 +1,5 @@
 .doctor-detail-container{
     height: 500px;
-    border: 1px solid red;
     margin: 80px 100px 0 100px;
     .intro-doctor{
         display: flex;
@@ -14,7 +13,6 @@
         }
         .content-right{
             width: 80%;
-            border:1px solid grey;
             display: flex;
             flex-direction: column;
             padding-left: 10px;
@@ -26,5 +24,9 @@
                 padding-top: 10px;
             }
         }
+    }
+    .detail-info-doctor{
+        padding: 20px;
+        background-color: #e6e6e6;
     }
 }
